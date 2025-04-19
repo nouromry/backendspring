@@ -11,5 +11,5 @@ import java.util.List;
 
 @Repository
 public interface ProjetRepository extends JpaRepository<Projet, Integer> {
-    List<Projet> findByEnseignant(Enseignant enseignant);
+    List<Projet> findByEnseignantId(Integer enseignantId);
 }

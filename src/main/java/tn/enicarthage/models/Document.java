@@ -1,16 +1,13 @@
 package tn.enicarthage.models;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.util.Date;
-
-
 import lombok.*;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 @Entity
 @Table(name = "document")
 public class Document {
@@ -34,10 +31,12 @@ public class Document {
     
     @ManyToOne
     @JoinColumn(name = "binome_id", nullable = false)
+    @JsonBackReference
     private Binome binome;
     
     @ManyToOne
     @JoinColumn(name = "projet_id", nullable = false)
+    @JsonBackReference
     private Projet projet;
     
     public enum Type {

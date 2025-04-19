@@ -1,17 +1,14 @@
 package tn.enicarthage.models;
 
-
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
-
 import lombok.*;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 @Entity
 @Table(name = "projet")
 public class Projet {
@@ -40,15 +37,19 @@ public class Projet {
     
     @ManyToOne
     @JoinColumn(name = "enseignant_id", nullable = false)
+    @JsonBackReference
     private Enseignant enseignant;
     
     @OneToMany(mappedBy = "projet")
+    @JsonBackReference
     private List<Commentaire> commentaires;
     
     @OneToMany(mappedBy = "projet")
+    @JsonBackReference
     private List<Document> documents;
     
     @OneToMany(mappedBy = "projet")
+    @JsonBackReference
     private List<ChoixProjet> choixProjets;
     
     public enum Etat {

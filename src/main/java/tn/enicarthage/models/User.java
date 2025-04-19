@@ -1,5 +1,6 @@
 package tn.enicarthage.models;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.*;
@@ -25,6 +26,7 @@ public class User {
     private String email;
     
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
     
     @Enumerated(EnumType.STRING)
@@ -32,6 +34,7 @@ public class User {
     private Role role;
     
     @OneToMany(mappedBy = "auteur")
+    @JsonBackReference
     private List<Commentaire> commentaires;
   
     public enum Role {

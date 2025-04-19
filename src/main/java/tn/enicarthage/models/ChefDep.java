@@ -1,17 +1,12 @@
 package tn.enicarthage.models;
 
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import lombok.*;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 @Entity
 @Table(name = "chefDep")
 @PrimaryKeyJoinColumn(name = "id")

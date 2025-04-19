@@ -1,11 +1,9 @@
 package tn.enicarthage.models;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-
-import java.math.BigDecimal;
 import java.util.List;
 import lombok.*;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,8 +17,10 @@ public class Enseignant extends User {
     private String specialite;
     
     @OneToMany(mappedBy = "enseignant")
+    @JsonBackReference
     private List<Projet> projets;
     
     @OneToMany(mappedBy = "enseignant")
+    @JsonBackReference
     private List<JurySoutenance> jurys;
 }

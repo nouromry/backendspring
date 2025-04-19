@@ -1,6 +1,6 @@
 package tn.enicarthage.models;
 
-
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.util.Date;
 
@@ -20,10 +20,11 @@ public class Commentaire {
     
     @ManyToOne
     @JoinColumn(name = "auteur_id", nullable = false)
+    @JsonBackReference
     private User auteur;
     
     @ManyToOne
     @JoinColumn(name = "projet_id", nullable = false)
+    @JsonBackReference
     private Projet projet;
-    
 }

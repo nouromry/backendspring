@@ -1,6 +1,6 @@
 package tn.enicarthage.models;
 
-
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,17 +12,18 @@ public class ChoixProjet {
     @ManyToOne
     @MapsId("idBinome")
     @JoinColumn(name = "idBinome")
+    @JsonBackReference
     private Binome binome;
     
     @ManyToOne
     @MapsId("idProjet")
     @JoinColumn(name = "idProjet")
+    @JsonManagedReference
     private Projet projet;
     
     @Column(nullable = false)
     private Integer priorite;
     
-    // Composite key class
     @Embeddable
     public static class ChoixProjetId implements java.io.Serializable {
         private Integer idBinome;
@@ -35,7 +36,6 @@ public class ChoixProjet {
             this.idProjet = idProjet;
         }
         
-        // hashCode and equals methods
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -52,8 +52,6 @@ public class ChoixProjet {
             int result = idBinome.hashCode();
             result = 31 * result + idProjet.hashCode();
             return result;
-
-}
+        }
     }
 }
-   
