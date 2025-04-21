@@ -23,6 +23,16 @@ public class ChoixProjet {
     
     @Column(nullable = false)
     private Integer priorite;
+
+    // Getter for 'projet'
+    public Projet getProjet() {
+        return projet;
+    }
+
+    // Getter for 'priorite'
+    public Integer getPriorite() {
+        return priorite;
+    }
     
     @Embeddable
     public static class ChoixProjetId implements java.io.Serializable {

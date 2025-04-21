@@ -21,6 +21,8 @@ public class Etudiant extends User {
     
     @Column(nullable = false, length = 50)
     private String filiere;
+    @Column(nullable = false, length = 50)
+    private String groupe;
     
     @OneToOne(mappedBy = "etud1")
     @JsonBackReference
