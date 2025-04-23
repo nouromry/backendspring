@@ -12,4 +12,11 @@ import java.util.List;
 @Repository
 public interface ProjetRepository extends JpaRepository<Projet, Integer> {
     List<Projet> findByEnseignantId(Integer enseignantId);
+    List<Projet> findByEtat(String etat);
+    List<Projet> findByTitreContainingIgnoreCaseOrEnseignant_NomContainingIgnoreCase(String titre, String enseignantNom);
+    List<Projet> findByFiliere(String filiere);
 }
+
+
+
+
