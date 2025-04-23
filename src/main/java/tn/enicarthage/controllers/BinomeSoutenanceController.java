@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/binomes")
-@CrossOrigin(origins = "*")
+
 public class BinomeSoutenanceController {
 
     private final BinomeSoutenanceService binomeService;
