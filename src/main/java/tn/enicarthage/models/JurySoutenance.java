@@ -30,7 +30,7 @@ public class JurySoutenance {
     private Role role;
     
     public enum Role {
-        président, examinateur, rapporteur
+         examinateur, encadrant,rapporteur,président
     }
     
     @Embeddable

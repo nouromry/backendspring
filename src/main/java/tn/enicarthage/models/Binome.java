@@ -40,4 +40,10 @@ public class Binome {
     @OneToMany(mappedBy = "binome")
     @JsonBackReference
     private List<ChoixProjet> choixProjets;
+    
+    @ManyToOne
+    @JoinColumn(name = "projet_affecte_id", unique = true) // unique enforces one-to-one from Projet to Binome
+    @JsonManagedReference
+    private Projet projetAffecte;
+
 }

@@ -20,15 +20,10 @@ public class Soutenance {
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date date;
-    
-    @Column
-    private Integer duree;
-    
+     
     @Column(nullable = false)
     private Time heureD;
     
-    @Column(nullable = false)
-    private Time heureF;
     
     @Column(nullable = false)
     private String salle;

@@ -34,11 +34,14 @@ public class Projet {
     
     @Temporal(TemporalType.DATE)
     private Date dateAffectation;
+    @Column(name = "filiere")
+    private String filiere;
     
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "enseignant_id", nullable = false)
-    @JsonBackReference
     private Enseignant enseignant;
+
     
     @OneToMany(mappedBy = "projet")
     @JsonBackReference
@@ -52,7 +55,39 @@ public class Projet {
     @JsonBackReference
     private List<ChoixProjet> choixProjets;
     
+    @OneToOne(mappedBy = "projetAffecte")
+    @JsonBackReference
+    private Binome binomeAffecte;
+
+    
     public enum Etat {
-        en_cours, terminé, en_attente
+        en_attente, valide, annulee;
+        
+        // Add a helper method to convert string values safely
+    	public static Etat fromString(String value) {
+    	    if (value == null) return null;
+
+    	    try {
+    	        return valueOf(value.toUpperCase());
+    	    } catch (IllegalArgumentException e) {
+    	        switch (value.toLowerCase()) {
+    	            case "en_attente":
+    	            case "en attente":
+    	            case "en_cours":
+    	                return en_attente;
+    	            case "valide":
+    	            case "validee":
+    	            case "valider":
+    	            case "termine":
+    	            case "terminee":
+    	                return valide;
+    	            case "annulee":
+    	            case "annulée":
+    	                return annulee;
+    	            default:
+    	                throw new IllegalArgumentException("Valeur d'état inconnue : " + value);
+    	        }
+    	    }
+    	}
     }
 }
