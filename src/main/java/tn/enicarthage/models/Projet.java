@@ -2,6 +2,8 @@ package tn.enicarthage.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import lombok.*;
@@ -59,6 +61,11 @@ public class Projet {
     @JoinColumn(name = "binome_affecte_id") 
     @JsonBackReference
     private Binome binomeAffecte;
+    
+    @ManyToOne
+    @JoinColumn(name = "etudiant_createur_id")
+    @JsonBackReference
+    private Etudiant etudiantCreateur;
 
     
     public enum Etat {

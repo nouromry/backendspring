@@ -12,6 +12,10 @@ import java.util.List;
 
 public interface EnseignantRepository extends JpaRepository<Enseignant, Integer> {
     Enseignant findByEmail(String email);
+
     List<Enseignant> findBySpecialite(String specialite);
     List<Enseignant> findByNomContainingIgnoreCase(String nom);
+   
+    
+    
 }

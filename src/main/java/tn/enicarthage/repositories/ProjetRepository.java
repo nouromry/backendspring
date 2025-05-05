@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tn.enicarthage.models.Binome;
 import tn.enicarthage.models.Enseignant;
+import tn.enicarthage.models.Etudiant;
 import tn.enicarthage.models.Projet;
 
 import java.util.List;
@@ -36,4 +38,10 @@ public interface ProjetRepository extends JpaRepository<Projet, Integer> {
             "WHERE p.enseignant.id = :enseignantId " +
             "AND p.etat = 'VALIDE'")  // Changed this line
      List<Projet> findValidProjectsWithBinomeDetailsByEnseignantId(@Param("enseignantId") Integer enseignantId);
+    List<Projet> findByBinomeAffecteId(Integer binomeId);
+    
+    // Add these new methods
+    List<Projet> findByBinomeAffecte(Binome binome);
+    
+    List<Projet> findByEtudiantCreateur(Etudiant etudiant);
 }
