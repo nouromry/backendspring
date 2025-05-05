@@ -1,10 +1,9 @@
-
-
-	package tn.enicarthage.services;
+package tn.enicarthage.services;
 
 	import tn.enicarthage.models.Binome;
 	import tn.enicarthage.models.Etudiant;
-	import tn.enicarthage.repositories.BinomeSoutenanceRepository;
+import tn.enicarthage.models.Projet;
+import tn.enicarthage.repositories.BinomeSoutenanceRepository;
 	import tn.enicarthage.repositories.EtudiantRepository;
 
 	import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@
 	import java.math.BigDecimal;
 	import java.util.List;
 	import java.util.NoSuchElementException;
+import java.util.Optional;
 
 	@Service
 	public class BinomeSoutenanceService {
@@ -114,4 +114,11 @@
 	    public List<Binome> findBinomesByAverageRange(BigDecimal min, BigDecimal max) {
 	        return binomeRepository.findByAverageGradeRange(min, max);
 	    }
+	    
+	 
+	    public Optional<Projet> getProjetByBinomeId(Integer binomeId) {
+	        return binomeRepository.findById(binomeId)
+	                .map(Binome::getProjetAffecte);
+	    }
+
 	}

@@ -10,8 +10,10 @@ import tn.enicarthage.models.Binome;
 import tn.enicarthage.models.Enseignant;
 import tn.enicarthage.models.Etudiant;
 import tn.enicarthage.models.Projet;
+import tn.enicarthage.models.Projet.Etat;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProjetRepository extends JpaRepository<Projet, Integer> {
@@ -44,4 +46,6 @@ public interface ProjetRepository extends JpaRepository<Projet, Integer> {
     List<Projet> findByBinomeAffecte(Binome binome);
     
     List<Projet> findByEtudiantCreateur(Etudiant etudiant);
-}
+    
+    List<Projet> findByEtatAndFiliere(Projet.Etat etat, String filiere);
+    List<Projet> findByEtat( Projet.Etat  etat);}

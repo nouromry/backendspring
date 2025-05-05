@@ -343,4 +343,13 @@ public class SoutenanceService {
             // Additional processing for batch operations can be added here
         }
     }
+    
+    
+    public Optional<SoutenanceCreateDTO> getSoutenanceViewByBinomeId(Integer binomeId) {
+        return soutenanceRepository.findAll().stream()
+            .filter(s -> s.getBinome().getId().equals(binomeId))
+            .findFirst()
+            .map(this::convertToDTO);
+    }
+
 }

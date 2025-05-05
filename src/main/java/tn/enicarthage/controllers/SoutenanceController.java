@@ -112,4 +112,13 @@ public class SoutenanceController {
         List<SoutenanceCreateDTO> dtos = soutenanceService.getAllSoutenanceViews();
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
+    
+    
+    @GetMapping("/by-binome/{binomeId}")
+    public ResponseEntity<?> getSoutenanceByBinomeId(@PathVariable Integer binomeId) {
+        return soutenanceService.getSoutenanceViewByBinomeId(binomeId)
+            .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 }

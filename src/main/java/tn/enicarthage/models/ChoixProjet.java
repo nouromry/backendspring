@@ -2,7 +2,8 @@ package tn.enicarthage.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-
+import lombok.*;
+@Data
 @Entity
 @Table(name = "choixProjet")
 public class ChoixProjet {
@@ -29,7 +30,6 @@ public class ChoixProjet {
         return projet;
     }
 
-    // Getter for 'priorite'
     public Integer getPriorite() {
         return priorite;
     }

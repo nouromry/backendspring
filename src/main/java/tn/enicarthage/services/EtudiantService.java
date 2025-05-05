@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EtudiantService {
@@ -85,5 +86,12 @@ public class EtudiantService {
         }
         
         return projets;
+    }
+    public Optional<Etudiant> getEtudiantByMatricule(String matricule) {
+        return etudiantRepository.findByMatricule(matricule);
+    }
+    
+    public List<Etudiant> getAllEtudiants() {
+        return etudiantRepository.findAll();
     }
 }

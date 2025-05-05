@@ -32,4 +32,16 @@ public class EtudiantController {
     public List<Projet> getStudentProjects(@PathVariable("etudiantId") Integer etudiantId) {
         return etudiantService.getStudentProjects(etudiantId);
     }
+    
+    @GetMapping("/matricule/{matricule}")
+    public ResponseEntity<?> getEtudiantByMatricule(@PathVariable String matricule) {
+        return etudiantService.getEtudiantByMatricule(matricule)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping
+    public List<Etudiant> getAllEtudiants() {
+        return etudiantService.getAllEtudiants();
+    }
 }
