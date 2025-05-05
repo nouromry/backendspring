@@ -2,8 +2,16 @@ package tn.enicarthage.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "commentaire")
 public class Commentaire {
@@ -20,11 +28,13 @@ public class Commentaire {
     
     @ManyToOne
     @JoinColumn(name = "auteur_id", nullable = false)
-    @JsonBackReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private User auteur;
     
     @ManyToOne
     @JoinColumn(name = "projet_id", nullable = false)
-    @JsonBackReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Projet projet;
 }

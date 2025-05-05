@@ -30,7 +30,7 @@ public class Binome {
     private BigDecimal moyenneBinome;
     
     @OneToMany(mappedBy = "binome")
-    @JsonBackReference
+    @JsonBackReference 
     private List<Document> documents;
     
     @OneToOne(mappedBy = "binome")

@@ -56,6 +56,7 @@ public class Projet {
     private List<ChoixProjet> choixProjets;
     
     @OneToOne(mappedBy = "projetAffecte")
+    @JoinColumn(name = "binome_affecte_id") 
     @JsonBackReference
     private Binome binomeAffecte;
 

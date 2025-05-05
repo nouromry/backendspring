@@ -4,7 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import tn.enicarthage.dto.ProjetCreationDto;
+import tn.enicarthage.dto.ProjetWithBinomeDTO;
+import tn.enicarthage.dto.SoutenanceWithRoleDTO;
 import tn.enicarthage.models.Enseignant;
+import tn.enicarthage.models.Projet;
 import tn.enicarthage.services.EnseignantService;
 
 import java.util.List;
@@ -68,4 +73,44 @@ public class EnseignantController {
         List<Enseignant> enseignants = enseignantService.searchEnseignantsByName(nom);
         return new ResponseEntity<>(enseignants, HttpStatus.OK);
     }
+    @PostMapping("/{enseignantId}/projets")
+    public Projet createProject(@PathVariable Integer enseignantId, 
+                              @RequestBody ProjetCreationDto projetDto) {
+        return enseignantService.createProject(projetDto, enseignantId);
+    }
+
+    @GetMapping("/{enseignantId}/projets")
+    public List<Projet> getEnseignantProjects(@PathVariable Integer enseignantId) {
+        return enseignantService.getProjectsByEnseignant(enseignantId);
+    }
+    
+    
+
+    @GetMapping("/{enseignantId}/projets-valides")
+    public ResponseEntity<List<ProjetWithBinomeDTO>> getValidProjectsWithBinomeDetails(
+            @PathVariable Integer enseignantId) {
+        
+        List<ProjetWithBinomeDTO> projets = enseignantService.getValidProjectsWithBinomeDetails(enseignantId);
+        
+        if (projets.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        
+        return ResponseEntity.ok(projets);
+    }
+    
+    @GetMapping("/{enseignantId}/soutenances")
+    public ResponseEntity<List<SoutenanceWithRoleDTO>> getSoutenancesByEnseignant(
+            @PathVariable Integer enseignantId) {
+        
+        List<SoutenanceWithRoleDTO> soutenances = enseignantService
+                .getSoutenancesByEnseignant(enseignantId);
+        
+        if (soutenances.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        
+        return ResponseEntity.ok(soutenances);
+    }
+    
 }

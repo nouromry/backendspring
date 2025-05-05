@@ -2,12 +2,15 @@ package tn.enicarthage.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import tn.enicarthage.dto.ProjetWithBinomeDTO;
 import tn.enicarthage.models.Projet;
 import tn.enicarthage.repositories.ProjetRepository;
 import tn.enicarthage.models.Projet.Etat;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,5 +54,11 @@ public class ProjetService {
 
     public Projet saveProjet(Projet projet) {
         return projetRepository.save(projet);
+    }
+    public List<ProjetWithBinomeDTO> getValidProjectsWithBinomeDetails(Integer enseignantId) {
+        return projetRepository.findValidProjectsWithBinomeDetailsByEnseignantId(enseignantId)
+                .stream()
+                .map(ProjetWithBinomeDTO::new)
+                .collect(Collectors.toList());
     }
 }
