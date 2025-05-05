@@ -1,3 +1,8 @@
+
+
+
+
+
 package tn.enicarthage.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +20,5 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer> {
     List<Etudiant> findByFiliere(String filiere);
     List<Etudiant> findByMoyenneGeneralGreaterThanEqual(BigDecimal moyenne);
     boolean existsByMatricule(String matricule);
+    Etudiant findByEmail(String email);
 }
