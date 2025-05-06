@@ -2,15 +2,20 @@
 package tn.enicarthage.controllers;
 
 import tn.enicarthage.dto.ProjetCreationDto;
+import tn.enicarthage.models.Document;
 import tn.enicarthage.models.Etudiant;
 import tn.enicarthage.models.Projet;
 import tn.enicarthage.services.EtudiantService;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.annotation.Resource;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -44,4 +49,7 @@ public class EtudiantController {
     public List<Etudiant> getAllEtudiants() {
         return etudiantService.getAllEtudiants();
     }
+    
+   
+   
 }

@@ -4,12 +4,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import tn.enicarthage.models.Document;
 import tn.enicarthage.services.DocumentService;
 
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("/api/documents")
 // Allow requests from any origin, you might want to restrict this in production
@@ -78,5 +91,82 @@ public class DocumentController {
     public ResponseEntity<List<Document>> getDocumentsByProjetId(@PathVariable Integer projetId) {
         List<Document> documents = documentService.findDocumentsByProjetId(projetId);
         return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
+    
+    
+    @GetMapping("/etudiant/{etudiantId}")
+    public ResponseEntity<List<Document>> getDocumentsByEtudiantId(@PathVariable Integer etudiantId) {
+        try {
+            List<Document> documents = documentService.getDocumentsByEtudiantId(etudiantId);
+            return ResponseEntity.ok(documents);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * Upload a new document
+     */
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadDocument(
+            @RequestParam("etudiantId") Integer etudiantId,
+            @RequestParam("projetId") Integer projetId,
+            @RequestParam("titre") String titre,
+            @RequestParam("type") Document.Type type,
+            @RequestParam("file") MultipartFile file) {
+        
+        try {
+            Document document = documentService.uploadDocument(etudiantId, projetId, titre, type, file);
+            return ResponseEntity.ok(document);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to upload document: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+    
+    /**
+     * Download a document
+     */
+    @GetMapping("/download/{documentId}/{etudiantId}")
+    public ResponseEntity<?> downloadDocument(@PathVariable Integer documentId, @PathVariable Integer etudiantId) {
+        try {
+            if (!documentService.isAuthorizedToAccessDocument(documentId, etudiantId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not authorized to access this document");
+            }
+
+            Document document = documentService.getDocumentById(documentId);
+            Path filePath = Paths.get("uploads/documents", document.getCheminFichier());
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                "attachment; filename=\"" + document.getTitre() + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found or cannot be read");
+            }
+        } catch (MalformedURLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing file: " + e.getMessage());
+        }
+    }
+    /**
+     * Delete a document
+     */
+    @DeleteMapping("/{documentId}/{etudiantId}")
+    public ResponseEntity<?> deleteDocument(@PathVariable Integer documentId, 
+                                            @PathVariable Integer etudiantId) {
+        try {
+            documentService.deleteDocument(documentId, etudiantId);
+            return ResponseEntity.ok().body("Document deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 }

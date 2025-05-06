@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class BinomeDTO {
+	private int id;
     private String prenomEtud1;
     private String nomEtud1;
     private String prenomEtud2;
@@ -16,6 +17,7 @@ public class BinomeDTO {
     private String filiere;
     private String groupe;
     private BigDecimal moyenneEtud1;
+    private BigDecimal moyenneEtud2;
     private BigDecimal moyenneBinome;
     private List<String> projetsChoisis;
 }

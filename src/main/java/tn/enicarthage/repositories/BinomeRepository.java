@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface BinomeRepository extends JpaRepository<Binome, Integer> {
     Optional<Binome> findByEtud1OrEtud2(Etudiant etud1, Etudiant etud2);
+    Binome findByEtud1MatriculeOrEtud2Matricule(String matricule1, String matricule2);
+
 }

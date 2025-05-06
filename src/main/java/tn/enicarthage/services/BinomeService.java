@@ -23,6 +23,7 @@ public class BinomeService {
         List<Binome> binomes = binomeRepository.findAll();
 
         return binomes.stream().map(binome -> new BinomeDTO(
+        		binome.getId(),
                 binome.getEtud1().getPrenom(),
                 binome.getEtud1().getNom(),
                 binome.getEtud2().getPrenom(),
@@ -30,6 +31,7 @@ public class BinomeService {
                 binome.getEtud1().getFiliere(),
                 binome.getEtud1().getGroupe(),  // Make sure 'groupe' exists
                 binome.getEtud1().getMoyenneGeneral(),
+                binome.getEtud2().getMoyenneGeneral(),
                 binome.getMoyenneBinome(),
                 binome.getChoixProjets().stream()
                     .sorted(Comparator.comparing(ChoixProjet::getPriorite)) // Sort by priorite
