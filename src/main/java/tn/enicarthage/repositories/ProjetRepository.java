@@ -1,6 +1,5 @@
 package tn.enicarthage.repositories;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,7 +41,6 @@ public interface ProjetRepository extends JpaRepository<Projet, Integer> {
      List<Projet> findValidProjectsWithBinomeDetailsByEnseignantId(@Param("enseignantId") Integer enseignantId);
     List<Projet> findByBinomeAffecteId(Integer binomeId);
     
-    // Add these new methods
     List<Projet> findByBinomeAffecte(Binome binome);
     
     List<Projet> findByEtudiantCreateur(Etudiant etudiant);

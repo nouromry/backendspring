@@ -27,18 +27,15 @@ import java.util.Optional;
 	        this.etudiantRepository = etudiantRepository;
 	    }
 
-	    // Get all binomes
 	    public List<Binome> getAllBinomes() {
 	        return binomeRepository.findAll();
 	    }
 
-	    // Get binome by ID
 	    public Binome getBinomeById(Integer id) {
 	        return binomeRepository.findById(id)
 	                .orElseThrow(() -> new NoSuchElementException("Binome not found with id: " + id));
 	    }
 
-	    // Create new binome
 	    @Transactional
 	    public Binome createBinome(Binome binome) {
 	        Etudiant etud1 = etudiantRepository.findById(binome.getEtud1().getId())
@@ -61,7 +58,6 @@ import java.util.Optional;
 	        return binomeRepository.save(binome);
 	    }
 
-	    // Update binome
 	    @Transactional
 	    public Binome updateBinome(Integer id, Binome binomeDetails) {
 	        Binome binome = getBinomeById(id);
@@ -85,19 +81,16 @@ import java.util.Optional;
 	        return binomeRepository.save(binome);
 	    }
 
-	    // Delete binome
 	    @Transactional
 	    public void deleteBinome(Integer id) {
 	        Binome binome = getBinomeById(id);
 	        binomeRepository.delete(binome);
 	    }
 
-	    // Get binomes without soutenances
 	    public List<Binome> getBinomesWithoutSoutenance() {
 	        return binomeRepository.findBinomesWithoutSoutenance();
 	    }
 
-	    // Update binome average
 	    @Transactional
 	    public Binome updateBinomeAverage(Integer id, BigDecimal average) {
 	        Binome binome = getBinomeById(id);
@@ -105,12 +98,10 @@ import java.util.Optional;
 	        return binomeRepository.save(binome);
 	    }
 
-	    // Find binomes by student
 	    public List<Binome> findBinomesByEtudiant(Integer etudiantId) {
 	        return binomeRepository.findByEtudiant(etudiantId);
 	    }
 
-	    // Find binomes by average grade range
 	    public List<Binome> findBinomesByAverageRange(BigDecimal min, BigDecimal max) {
 	        return binomeRepository.findByAverageGradeRange(min, max);
 	    }

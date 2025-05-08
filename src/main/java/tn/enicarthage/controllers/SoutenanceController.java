@@ -33,16 +33,13 @@ public class SoutenanceController {
     @PostMapping
     public ResponseEntity<?> createSoutenance(@RequestBody SoutenanceCreateDTO soutenanceDTO) {
         try {
-            // Log the incoming data for debugging
             System.out.println("Received request: " + soutenanceDTO);
             
             SoutenanceCreateDTO createdSoutenance = soutenanceService.createSoutenanceView(soutenanceDTO);
             return new ResponseEntity<>(createdSoutenance, HttpStatus.CREATED);
         } catch (Exception e) {
-            // Log the full exception stack trace
             e.printStackTrace();
             
-            // Return detailed error information
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
             errorResponse.put("timestamp", new Date().toString());

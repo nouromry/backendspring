@@ -39,7 +39,6 @@ public class SoutenanceService {
 
         Soutenance soutenance = new Soutenance();
         
-        // Parse and set date
         if (dto.getDateSoutenance() != null) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -51,33 +50,27 @@ public class SoutenanceService {
             throw new RuntimeException("Date is required");
         }
         
-        // Parse and set start time (heureD)
         if (dto.getHeureDebut() != null) {
             try {
-                // Convert time string to Time object
                 soutenance.setHeureD(Time.valueOf(dto.getHeureDebut() + ":00"));
             } catch (Exception e) {
                 throw new RuntimeException("Invalid time format. Expected HH:MM");
             }
         } else {
-            // Set a default time if none provided
             soutenance.setHeureD(Time.valueOf("09:00:00"));
         }
         
         soutenance.setSalle(dto.getSalle());
         soutenance.setBinome(binome);
         
-        // Initialize the jury list if it's null
         if (soutenance.getJury() == null) {
             soutenance.setJury(new ArrayList<>());
         }
         
         soutenance = soutenanceRepository.save(soutenance);
         
-        // Add jury members if provided
         if (dto.getJuryMembers() != null && !dto.getJuryMembers().isEmpty()) {
             for (SoutenanceCreateDTO.JuryMemberDTO juryMember : dto.getJuryMembers()) {
-                // Make sure we're retrieving an Enseignant, not an Etudiant
                 Enseignant enseignant = enseignantRepository.findById(juryMember.getEnseignantId())
                     .orElseThrow(() -> new RuntimeException("Enseignant with ID " + juryMember.getEnseignantId() + " not found"));
                 
@@ -88,10 +81,9 @@ public class SoutenanceService {
                 );
                 
                 jury.setId(juryId);
-                jury.setEnseignant(enseignant); // Make sure enseignant is of type Enseignant
+                jury.setEnseignant(enseignant);
                 jury.setSoutenance(soutenance);
                 
-                // Set the role - Ensure we're properly handling the enum
                 try {
                     jury.setRole(juryMember.getRole());
                 } catch (Exception e) {
@@ -106,37 +98,31 @@ public class SoutenanceService {
         return soutenanceRepository.findById(soutenance.getId()).orElseThrow();
     }
     
-    // Method for creating a soutenance that returns a DTO
     @Transactional
     public SoutenanceCreateDTO createSoutenanceView(SoutenanceCreateDTO dto) {
         Soutenance soutenance = createSoutenance(dto);
         return convertToDTO(soutenance);
     }
     
-    // Method to get all soutenances
     public List<Soutenance> getAllSoutenances() {
         return soutenanceRepository.findAll();
     }
     
-    // Method to get all soutenances as DTOs
     public List<SoutenanceCreateDTO> getAllSoutenanceViews() {
         return soutenanceRepository.findAll().stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
     
-    // Method to get a soutenance by ID
     public Optional<Soutenance> getSoutenanceById(Integer id) {
         return soutenanceRepository.findById(id);
     }
     
-    // Method to get a soutenance DTO by ID
     public Optional<SoutenanceCreateDTO> getSoutenanceViewById(Integer id) {
         return soutenanceRepository.findById(id)
             .map(this::convertToDTO);
     }
     
-    // Method to get soutenances by date as DTOs
     public List<SoutenanceCreateDTO> getSoutenanceViewsByDate(Date date) {
         return soutenanceRepository.findAll().stream()
             .filter(s -> s.getDate().equals(date))
@@ -144,13 +130,11 @@ public class SoutenanceService {
             .collect(Collectors.toList());
     }
     
-    // Method to update a soutenance
     @Transactional
     public SoutenanceCreateDTO updateSoutenance(Integer id, SoutenanceCreateDTO dto) {
         Soutenance soutenance = soutenanceRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Defense session not found"));
         
-        // Update fields
         if (dto.getDateSoutenance() != null) {
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -172,9 +156,7 @@ public class SoutenanceService {
             soutenance.setSalle(dto.getSalle());
         }
         
-        // If binome ID is provided and different from current one
         if (dto.getBinomeId() != null && !dto.getBinomeId().equals(soutenance.getBinome().getId())) {
-            // Check if new binome already has a defense
             if (soutenanceRepository.findAll().stream()
                     .anyMatch(s -> !s.getId().equals(id) && s.getBinome().getId().equals(dto.getBinomeId()))) {
                 throw new RuntimeException("This binome already has a scheduled defense session");
@@ -185,9 +167,7 @@ public class SoutenanceService {
             soutenance.setBinome(binome);
         }
         
-        // Update jury if provided
         if (dto.getJuryMembers() != null && !dto.getJuryMembers().isEmpty()) {
-            // Remove existing jury members
             if (soutenance.getJury() != null) {
                 for (JurySoutenance jury : new ArrayList<>(soutenance.getJury())) {
                     jurySoutenanceRepository.deleteById(jury.getId());
@@ -197,7 +177,6 @@ public class SoutenanceService {
                 soutenance.setJury(new ArrayList<>());
             }
             
-            // Add new jury members
             for (SoutenanceCreateDTO.JuryMemberDTO juryMember : dto.getJuryMembers()) {
                 Enseignant enseignant = enseignantRepository.findById(juryMember.getEnseignantId())
                     .orElseThrow(() -> new RuntimeException("Enseignant with ID " + juryMember.getEnseignantId() + " not found"));
@@ -212,7 +191,6 @@ public class SoutenanceService {
                 jury.setEnseignant(enseignant);
                 jury.setSoutenance(soutenance);
                 
-                // Set the role - Ensure we're properly handling the enum
                 try {
                     jury.setRole(juryMember.getRole());
                 } catch (Exception e) {
@@ -228,38 +206,31 @@ public class SoutenanceService {
         return convertToDTO(soutenance);
     }
     
-    // Method to delete a soutenance
     @Transactional
     public void deleteSoutenance(Integer id) {
         Soutenance soutenance = soutenanceRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Defense session not found"));
         
-        // Delete all jury associations first
         if (soutenance.getJury() != null) {
             for (JurySoutenance jury : new ArrayList<>(soutenance.getJury())) {
                 jurySoutenanceRepository.deleteById(jury.getId());
             }
         }
         
-        // Then delete the defense session
         soutenanceRepository.deleteById(id);
     }
     
-    // Helper method to convert Soutenance to SoutenanceCreateDTO
     public SoutenanceCreateDTO convertToDTO(Soutenance soutenance) {
         SoutenanceCreateDTO dto = new SoutenanceCreateDTO();
         dto.setId(soutenance.getId());
         dto.setSalle(soutenance.getSalle());
         
-        // Format date
         if (soutenance.getDate() != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             dto.setDateSoutenance(dateFormat.format(soutenance.getDate()));
         }
         
-        // Format time
         if (soutenance.getHeureD() != null) {
-            // Format time to HH:MM (without seconds)
             String timeStr = soutenance.getHeureD().toString();
             if (timeStr.length() >= 5) {
                 timeStr = timeStr.substring(0, 5);
@@ -267,7 +238,6 @@ public class SoutenanceService {
             dto.setHeureDebut(timeStr);
         }
         
-        // Set binome information
         Binome binome = soutenance.getBinome();
         if (binome != null) {
             dto.setBinomeId(binome.getId());
@@ -280,7 +250,6 @@ public class SoutenanceService {
                 dto.setBinomeEtudiant2(binome.getEtud2().getNom() + " " + binome.getEtud2().getPrenom());
             }
             
-            // Set project information if binome has an assigned project
             Projet projet = binome.getProjetAffecte();
             if (projet != null) {
                 dto.setProjetId(projet.getId());
@@ -290,7 +259,6 @@ public class SoutenanceService {
             }
         }
         
-        // Set jury members
         if (soutenance.getJury() != null && !soutenance.getJury().isEmpty()) {
             List<SoutenanceCreateDTO.JuryMemberDTO> juryMemberDTOs = new ArrayList<>();
             StringBuilder enseignants = new StringBuilder();
@@ -303,7 +271,6 @@ public class SoutenanceService {
                     
                     juryMemberDTOs.add(juryMemberDTO);
                     
-                    // Build enseignants string
                     if (enseignants.length() > 0) {
                         enseignants.append(", ");
                     }
@@ -323,7 +290,6 @@ public class SoutenanceService {
         return dto;
     }
     
-    // Method to add multiple jury members in batch
     @Transactional
     public void addJuryMembersBatch(List<SoutenanceCreateDTO.JuryMemberDTO> juryMembers) {
         if (juryMembers == null || juryMembers.isEmpty()) {
@@ -331,17 +297,13 @@ public class SoutenanceService {
         }
         
         for (SoutenanceCreateDTO.JuryMemberDTO juryMember : juryMembers) {
-            // Validate enseignant exists
             Enseignant enseignant = enseignantRepository.findById(juryMember.getEnseignantId())
                 .orElseThrow(() -> new RuntimeException("Enseignant with ID " + juryMember.getEnseignantId() + " not found"));
             
-            // Get all soutenances for which this enseignant is a jury member
             List<JurySoutenance> existingJuryRoles = jurySoutenanceRepository.findAll().stream()
                 .filter(j -> j.getEnseignant().getId().equals(enseignant.getId()))
                 .collect(Collectors.toList());
-            
-            // Additional processing for batch operations can be added here
-        }
+                    }
     }
     
     

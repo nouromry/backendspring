@@ -35,7 +35,6 @@ public class EtudiantService {
         Etudiant etudiant = etudiantRepository.findById(etudiantId)
                 .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
         
-        // Check if student is in a binôme
         Binome binome = binomeRepository.findByEtud1OrEtud2(etudiant, etudiant)
                 .orElse(null);
         
@@ -51,17 +50,14 @@ public class EtudiantService {
         projet.setEtat(Projet.Etat.en_attente);
         projet.setDateDepot(java.sql.Date.valueOf(LocalDate.now()));
         
-        // Assign teacher based on filiere/specialite
         Enseignant enseignant = enseignantRepository.findBySpecialite(projetDto.getFiliere())
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Aucun enseignant trouvé pour cette filière"));
         projet.setEnseignant(enseignant);
         
-        // Set the student creator
         projet.setEtudiantCreateur(etudiant);
         
-        // If student is in a binôme, assign the binôme
         if (binome != null) {
             projet.setBinomeAffecte(binome);
         }
@@ -73,13 +69,10 @@ public class EtudiantService {
         Etudiant etudiant = etudiantRepository.findById(etudiantId)
                 .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
         
-        // Get projects either through binôme or directly as creator
         List<Projet> projets = new ArrayList<>();
         
-        // Get projects where student is creator
         projets.addAll(projetRepository.findByEtudiantCreateur(etudiant));
         
-        // Get projects through binôme
         Binome binome = binomeRepository.findByEtud1OrEtud2(etudiant, etudiant).orElse(null);
         if (binome != null) {
             projets.addAll(projetRepository.findByBinomeAffecte(binome));

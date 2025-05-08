@@ -127,9 +127,7 @@ public class DocumentController {
         }
     }
     
-    /**
-     * Download a document
-     */
+
     @GetMapping("/download/{documentId}/{etudiantId}")
     public ResponseEntity<?> downloadDocument(@PathVariable Integer documentId, @PathVariable Integer etudiantId) {
         try {
@@ -155,9 +153,7 @@ public class DocumentController {
                     .body("Error processing file: " + e.getMessage());
         }
     }
-    /**
-     * Delete a document
-     */
+
     @DeleteMapping("/{documentId}/{etudiantId}")
     public ResponseEntity<?> deleteDocument(@PathVariable Integer documentId, 
                                             @PathVariable Integer etudiantId) {

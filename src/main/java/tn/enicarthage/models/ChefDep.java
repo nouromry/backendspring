@@ -15,7 +15,6 @@ public class ChefDep extends User {
     @Column(nullable = false, length = 100)
     private String departement;
     
-    // Getters and setters
     public String getDepartement() {
         return departement;
     }

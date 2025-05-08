@@ -40,7 +40,6 @@ public class EspaceEchangeEtudiantController {
         }
     }
 
-    // Add a new comment from a student to their project
     @PostMapping("/{etudiantId}/comment")
     public ResponseEntity<Commentaire> addComment(
             @PathVariable Integer etudiantId,

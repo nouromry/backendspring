@@ -15,12 +15,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // Create a DTO class to hold login credentials
     public static class LoginRequest {
         public String email;
         public String password;
 
-        // Getters and Setters (optional if using public fields)
     }
 
     @PostMapping("/login")

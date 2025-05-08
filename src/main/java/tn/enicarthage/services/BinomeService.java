@@ -35,9 +35,9 @@ public class BinomeService {
                 binome.getMoyenneBinome(),
                 binome.getChoixProjets().stream()
                     .sorted(Comparator.comparing(ChoixProjet::getPriorite)) // Sort by priorite
-                    .map(cp -> cp.getProjet().getTitre()) // Accessing 'projet' and getting 'titre'
-                    .collect(Collectors.toList()) // Collect the titles in a list
-        )).collect(Collectors.toList()); // Collect the BinomeDTO objects in a list
+                    .map(cp -> cp.getProjet().getTitre()) 
+                    .collect(Collectors.toList()) 
+        )).collect(Collectors.toList()); 
     }
 
 

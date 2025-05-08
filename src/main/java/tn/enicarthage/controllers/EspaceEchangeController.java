@@ -21,19 +21,16 @@ public class EspaceEchangeController {
         this.espaceEchangeService = espaceEchangeService;
     }
 
-    // Get all comments for all projects supervised by a teacher
     @GetMapping("/{enseignantId}/comments")
     public List<Commentaire> getAllCommentsForEnseignant(@PathVariable Integer enseignantId) {
         return espaceEchangeService.getCommentsForEnseignant(enseignantId);
     }
 
-    // Get comments for a specific project
     @GetMapping("/projet/{projetId}/comments")
     public List<CommentaireDTO> getCommentsForProject(@PathVariable Integer projetId) {
         return espaceEchangeService.getCommentsForProject(projetId);
     }
 
-    // Add a new comment to a project
     @PostMapping("/{enseignantId}/projet/{projetId}/comment")
     public ResponseEntity<Commentaire> addComment(
         @PathVariable Integer enseignantId,

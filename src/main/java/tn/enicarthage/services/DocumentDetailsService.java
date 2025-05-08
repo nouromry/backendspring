@@ -19,7 +19,6 @@ public class DocumentDetailsService {
         
         return mapToDocumentDetailsDTO(document);
     }
-    // Add this method to get document by ID
     public Document getDocumentById(Integer documentId) {
         return documentRepository.findById(documentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Document not found with id: " + documentId));
@@ -29,14 +28,12 @@ public class DocumentDetailsService {
     private DocumentDetailsDTO mapToDocumentDetailsDTO(Document document) {
         DocumentDetailsDTO dto = new DocumentDetailsDTO();
         
-        // Document details
         dto.setId(document.getId());
         dto.setTitre(document.getTitre());
         dto.setType(document.getType());
         dto.setDateDepot(document.getDateDepot());
         dto.setCheminFichier(document.getCheminFichier());
         
-        // Binome details
         dto.setBinomeId(document.getBinome().getId());
         dto.setEtudiant1Nom(document.getBinome().getEtud1().getNom());
         dto.setEtudiant1Prenom(document.getBinome().getEtud1().getPrenom());
@@ -45,11 +42,9 @@ public class DocumentDetailsService {
         dto.setEtudiant2Prenom(document.getBinome().getEtud2().getPrenom());
         dto.setEtudiant2Filiere(document.getBinome().getEtud2().getFiliere());
         
-        // Project details
         dto.setProjetId(document.getProjet().getId());
         dto.setProjetTitre(document.getProjet().getTitre());
         
-        // Enseignant details
         dto.setEnseignantId(document.getProjet().getEnseignant().getId());
         dto.setEnseignantNom(document.getProjet().getEnseignant().getNom());
         dto.setEnseignantPrenom(document.getProjet().getEnseignant().getPrenom());

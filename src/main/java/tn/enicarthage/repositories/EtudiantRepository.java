@@ -1,8 +1,4 @@
 
-
-
-
-
 package tn.enicarthage.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,7 +24,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer> {
     @Query("SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END FROM Binome b WHERE b.etud1.id = :etudiantId OR b.etud2.id = :etudiantId")
     boolean isPartOfBinome(@Param("etudiantId") Integer etudiantId);
     
-    // Get binome for a student
     @Query("SELECT b FROM Binome b WHERE b.etud1.id = :etudiantId OR b.etud2.id = :etudiantId")
     Optional<Binome> findBinomeByEtudiantId(@Param("etudiantId") Integer etudiantId);
 }

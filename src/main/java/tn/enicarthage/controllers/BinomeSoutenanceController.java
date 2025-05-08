@@ -91,7 +91,6 @@ public class BinomeSoutenanceController {
     }
     
     
-    
     @GetMapping("/{id}/projet")
     public ResponseEntity<Projet> getProjetByBinomeId(@PathVariable Integer id) {
         return binomeService.getProjetByBinomeId(id)

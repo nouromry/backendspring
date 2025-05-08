@@ -26,14 +26,12 @@ public class EspaceEchangeService {
         this.projetRepository = projetRepository;
     }
 
-    // Get all comments for projects supervised by a teacher
     public List<Commentaire> getCommentsForEnseignant(Integer enseignantId) {
         Enseignant enseignant = enseignantRepository.findById(enseignantId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found"));
         return commentaireRepository.findCommentsForEnseignantProjects(enseignant);
     }
 
-    // Get comments for a specific project
     public List<CommentaireDTO> getCommentsForProject(Integer projetId) {
         Projet projet = projetRepository.findById(projetId)
                 .orElseThrow(() -> new RuntimeException("Projet not found"));
@@ -48,7 +46,6 @@ public class EspaceEchangeService {
                 ))
                 .collect(Collectors.toList());
     }
-    // Add a new comment (teacher's response)
     @Transactional
     public Commentaire addComment(Integer enseignantId, Integer projetId, String contenu) {
         Enseignant enseignant = enseignantRepository.findById(enseignantId)
@@ -56,7 +53,6 @@ public class EspaceEchangeService {
         Projet projet = projetRepository.findById(projetId)
                 .orElseThrow(() -> new RuntimeException("Projet not found"));
         
-        // Verify that the teacher is the supervisor of this project
         if (!projet.getEnseignant().getId().equals(enseignantId)) {
             throw new RuntimeException("This teacher doesn't supervise this project");
         }
@@ -70,10 +66,8 @@ public class EspaceEchangeService {
         return commentaireRepository.save(commentaire);
     }
 
-    // Get all projects supervised by a teacher
     
     public List<ProjetWithBinomeDTO> getProjectsForEnseignant(Integer enseignantId) {
-        // Use the new repository method that filters by VALIDE status
         List<Projet> projets = projetRepository.findByEnseignantIdAndEtatValideWithBinome(enseignantId);
         
         if (projets.isEmpty()) {

@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/binomes")
- // adjust if needed
 public class BinomeController {
 
     private final BinomeService binomeService;

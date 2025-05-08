@@ -36,19 +36,14 @@ public class DocumentDetailsController {
     @GetMapping("/{id}/download")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Integer id) {
         try {
-            // Get document from database
             Document document = documentService.getDocumentById(id);
             
-            // Create path to the file
             Path filePath = Paths.get(document.getCheminFichier());
             Resource resource = new UrlResource(filePath.toUri());
             
-            // Check if file exists and is readable
             if (resource.exists() && resource.isReadable()) {
-                // Determine content type (you might want to use a more sophisticated approach)
                 String contentType = "application/pdf";
                 
-                // Extract original filename from path
                 String originalFilename = filePath.getFileName().toString();
                 
                 return ResponseEntity.ok()
